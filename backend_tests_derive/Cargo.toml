@@ -1,0 +1,12 @@
+[package]
+name = "backend_tests_derive"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+syn = { version = "2.0.89", features = ["full"] }
+quote = "1.0.37"
+proc-macro2 = "1.0.92"
+
+[lib]
+proc-macro = true
