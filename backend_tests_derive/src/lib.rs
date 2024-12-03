@@ -1,9 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{
-    parse_macro_input,
-    ItemFn,
-};
+use syn::{parse_macro_input, ItemFn};
 
 #[proc_macro_attribute]
 pub fn generate_backend_tests(
@@ -15,7 +12,10 @@ pub fn generate_backend_tests(
     let fn_name_str = fn_name.to_string();
 
     // Define the test generators
-    let generated_tests = vec![("wgpu", quote!(burn::backend::Wgpu))];
+    let generated_tests = vec![
+        ("wgpu", quote!(burn::backend::Wgpu)),
+        ("ndarray", quote!(burn::backend::NdArray)),
+    ];
 
     // Generate the test functions
     let test_fns = generated_tests.into_iter().map(|(name, backend)| {
@@ -35,11 +35,4 @@ pub fn generate_backend_tests(
     };
 
     result.into()
-}
-
-mod tests {
-    #[test]
-    fn test_noop() {
-        assert_eq!(1, 1);
-    }
 }

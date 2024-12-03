@@ -41,4 +41,73 @@ mod tests {
             ]
         );
     }
+
+    #[generate_backend_tests]
+    fn test_permute<B: Backend>(device: B::Device) {
+        let tensor: Tensor<B, 3> = Tensor::from_floats(
+            [
+                [[1., 2., 3.], [4., 5., 6.]],
+                [[7., 8., 9.], [10., 11., 12.]],
+            ],
+            &device,
+        );
+        assert_eq!(tensor.shape(), Shape::new([2, 2, 3]));
+
+        let tensor = tensor.permute([0, 2, 1]);
+
+        assert_eq!(tensor.shape(), Shape::new([2, 3, 2]));
+        assert_tensor_eq_floats!(
+            &tensor,
+            [
+                [[1., 4.], [2., 5.], [3., 6.]],
+                [[7., 10.], [8., 11.], [9., 12.]],
+            ]
+        );
+    }
+
+    #[generate_backend_tests]
+    fn test_movedim<B: Backend>(device: B::Device) {
+        let tensor: Tensor<B, 3> = Tensor::from_floats(
+            [
+                [[1., 2., 3.], [4., 5., 6.]],
+                [[7., 8., 9.], [10., 11., 12.]],
+            ],
+            &device,
+        );
+        assert_eq!(tensor.shape(), Shape::new([2, 2, 3]));
+
+        let tensor = tensor.movedim(1, 2);
+
+        assert_eq!(tensor.shape(), Shape::new([2, 3, 2]));
+        assert_tensor_eq_floats!(
+            &tensor,
+            [
+                [[1., 4.], [2., 5.], [3., 6.]],
+                [[7., 10.], [8., 11.], [9., 12.]],
+            ]
+        );
+    }
+
+    #[generate_backend_tests]
+    fn test_flip<B: Backend>(device: B::Device) {
+        let tensor: Tensor<B, 3> = Tensor::from_floats(
+            [
+                [[1., 2., 3.], [4., 5., 6.]],
+                [[7., 8., 9.], [10., 11., 12.]],
+            ],
+            &device,
+        );
+        assert_eq!(tensor.shape(), Shape::new([2, 2, 3]));
+
+        let tensor = tensor.flip([0, 1]);
+
+        assert_eq!(tensor.shape(), Shape::new([2, 2, 3]));
+        assert_tensor_eq_floats!(
+            &tensor,
+            [
+                [[10., 11., 12.], [7., 8., 9.],],
+                [[4., 5., 6.], [1., 2., 3.],],
+            ]
+        );
+    }
 }
